@@ -16,8 +16,6 @@
 
 package org.lucasr.twowayview.sample;
 
-import org.lucasr.twowayview.TwoWayView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -26,14 +24,17 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import org.lucasr.twowayview.TwoWayView;
+
+public class ListActivity extends Activity {
     private static final String LOGTAG = "TwoWayViewSample";
 
-    private TwoWayView mListView;
+    private ListView mListView;
 
     private Toast mToast;
     private String mClickMessage;
@@ -47,7 +48,7 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
 
         mClickMessage = "";
         mScrollMessage = "";
@@ -56,8 +57,8 @@ public class MainActivity extends Activity {
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         mToast.setGravity(Gravity.CENTER, 0, 0);
 
-        mListView = (TwoWayView) findViewById(R.id.list);
-        mListView.setItemMargin(10);
+        mListView = (ListView) findViewById(R.id.list);
+        //mListView.setItemMargin(10);
         mListView.setLongClickable(true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,7 +68,7 @@ public class MainActivity extends Activity {
                 mClickMessage = "Item clicked: " + position;
                 refreshToast();
                 Log.d("TwoWayViewMain-BEFORE", mListView.toString());
-                mListView.smoothScrollToPosition(position, 1000);
+                mListView.smoothScrollToPosition(position + 10);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -88,22 +89,22 @@ public class MainActivity extends Activity {
             }
         });
 
-        mListView.setOnScrollListener(new TwoWayView.OnScrollListener() {
+        mListView.setOnScrollListener(new ListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(TwoWayView view, int scrollState) {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
                 String stateName = "Undefined";
                 switch(scrollState) {
-                case SCROLL_STATE_IDLE:
-                    stateName = "Idle";
-                    break;
+                    case SCROLL_STATE_IDLE:
+                        stateName = "Idle";
+                        break;
 
-                case SCROLL_STATE_TOUCH_SCROLL:
-                    stateName = "Dragging";
-                    break;
+                    case SCROLL_STATE_TOUCH_SCROLL:
+                        stateName = "Dragging";
+                        break;
 
-                case SCROLL_STATE_FLING:
-                    stateName = "Flinging";
-                    break;
+                    case SCROLL_STATE_FLING:
+                        stateName = "Flinging";
+                        break;
                 }
 
                 mStateMessage = "Scroll state changed: " + stateName;
@@ -111,21 +112,20 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onScroll(TwoWayView view, int firstVisibleItem,
-                    int visibleItemCount, int totalItemCount) {
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 mScrollMessage = "Scroll (first: " + firstVisibleItem + ", count = " + visibleItemCount + ")";
                 refreshToast();
             }
         });
 
-        mListView.setRecyclerListener(new TwoWayView.RecyclerListener() {
+        mListView.setRecyclerListener(new ListView.RecyclerListener() {
             @Override
             public void onMovedToScrapHeap(View view) {
                 Log.d(LOGTAG, "View moved to scrap heap");
             }
         });
 
-        mListView.setAdapter(new SimpleListAdapter(MainActivity.this));
+        mListView.setAdapter(new SimpleListAdapter(ListActivity.this));
     }
 
     private void refreshToast() {
