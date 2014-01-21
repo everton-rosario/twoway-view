@@ -39,8 +39,6 @@ public class MainActivity extends Activity {
     private String mClickMessage;
     private String mScrollMessage;
     private String mStateMessage;
-    private boolean adjusting = false;
-    private Handler handler = new Handler();
 
     @SuppressLint("ShowToast")
     @Override
@@ -66,15 +64,6 @@ public class MainActivity extends Activity {
                     long id) {
                 mClickMessage = "Item clicked: " + position;
                 refreshToast();
-                Log.d("TwoWayViewMain-BEFORE", mListView.toString());
-                mListView.smoothScrollToPosition(position, 1000);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("TwoWayViewMain-AFTER", mListView.toString());
-                    }
-                }, 1000);
-                Log.d("TwoWayView", "left click: " + child.getLeft());
             }
         });
 
@@ -83,6 +72,7 @@ public class MainActivity extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View child,
                     int position, long id) {
                 mClickMessage = "Item long pressed: " + position;
+                mListView.smoothScrollToPosition(position+10);
                 refreshToast();
                 return true;
             }

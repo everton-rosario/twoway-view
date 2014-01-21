@@ -3684,72 +3684,8 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
         }
     }
 
-    /**
-     * Like {@link View#scrollBy}, but scroll smoothly instead of immediately.
-     *
-     * @param offset the number of pixels to scroll
-
-    public final void smoothScrollBy(int offset, int duration) {
-        if (getChildCount() == 0) {
-            // Nothing to do.
-            return;
-        }
-//        long duration = AnimationUtils.currentAnimationTimeMillis() - mLastScroll;
-//        if (duration > ANIMATED_SCROLL_GAP) {
-            final int size = mIsVertical ? getHeight() - getPaddingBottom() - getPaddingTop() : getWidth() - getPaddingRight() - getPaddingLeft();
-            final int end = getChildAt(0).getWidth();
-            final int maxDelta = Math.max(0, end - size);
-            final int scrollCoord = mIsVertical ? mScroller.getCurrY() : mScroller.getCurrX();
-            //offset = Math.max(0, Math.min(scrollCoord + offset, maxDelta)) - scrollCoord;
-
-            mScroller.startScroll(mIsVertical ? 0 : scrollCoord,
-                                  mIsVertical ? scrollCoord : 0,
-                                  mIsVertical ? 0 : offset,
-                                  mIsVertical ? offset : 0,
-                                  duration);
-
-            ViewCompat.postInvalidateOnAnimation(this);
-//        } else {
-//            if (!mScroller.isFinished()) {
-//                mScroller.abortAnimation();
-//            }
-//            scrollBy(offset);
-//        }
-        mLastScroll = AnimationUtils.currentAnimationTimeMillis();
-    }*/
-
 
     private PositionScroller mPositionScroller;
-    /**
-     * Smoothly scroll to the specified adapter position. The view will
-     * scroll such that the indicated position is displayed.
-     * @param position Scroll to this adapter position.
-     */
-    //public void smoothScrollToPosition(int position, int duration) {
-
-//        Log.d("TwoWayView", "position: " + position);
-//        int delta = position - getFirstVisiblePosition();
-//        Log.d("TwoWayView", "delta: " + delta);
-//        if (delta == 0) return;         // Already on correct position
-//
-//        final View child = getChildAt(0);
-//        final View nextChild = getChildAt(1);
-//        int childEdge = mIsVertical ? child.getTop() : child.getLeft();
-//        int childSize = mIsVertical ? nextChild.getTop() - child.getTop() : nextChild.getLeft() - child.getLeft();
-//
-//        int offset = (int) -( childSize * delta - (Math.abs(childEdge)) );
-//
-//        //scrollBy(offset);
-//        smoothScrollBy(offset, duration);
-//
-//        Log.d("TwoWayView", "childSize: "+ childSize + " position:"+ position+ " delta:"+ delta + " offset:" + offset + " destiny:" + childEdge);
-
-//        if (mPositionScroller == null) {
-//            mPositionScroller = new PositionScroller();
-//        }
-//        mPositionScroller.start(position);
-//
-//    }
 
     /**
      * Smoothly scroll to the specified adapter position. The view will
@@ -3764,59 +3700,6 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
     }
 
     /**
-     * Smoothly scroll to the specified adapter position. The view will scroll
-     * such that the indicated position is displayed <code>offset</code> pixels from
-     * the top edge of the view. If this is impossible, (e.g. the offset would scroll
-     * the first or last item beyond the boundaries of the list) it will get as close
-     * as possible. The scroll will take <code>duration</code> milliseconds to complete.
-     *
-     * @param position Position to scroll to
-     * @param offset Desired distance in pixels of <code>position</code> from the top
-     *               of the view when scrolling is finished
-     * @param duration Number of milliseconds to use for the scroll
-     */
-    public void smoothScrollToPositionFromTop(int position, int offset, int duration) {
-        if (mPositionScroller == null) {
-            mPositionScroller = new PositionScroller();
-        }
-        mPositionScroller.startWithOffset(position, offset, duration);
-    }
-
-    /**
-     * Smoothly scroll to the specified adapter position. The view will scroll
-     * such that the indicated position is displayed <code>offset</code> pixels from
-     * the top edge of the view. If this is impossible, (e.g. the offset would scroll
-     * the first or last item beyond the boundaries of the list) it will get as close
-     * as possible.
-     *
-     * @param position Position to scroll to
-     * @param offset Desired distance in pixels of <code>position</code> from the top
-     *               of the view when scrolling is finished
-     */
-    public void smoothScrollToPositionFromTop(int position, int offset) {
-        if (mPositionScroller == null) {
-            mPositionScroller = new PositionScroller();
-        }
-        mPositionScroller.startWithOffset(position, offset);
-    }
-
-    /**
-     * Smoothly scroll to the specified adapter position. The view will
-     * scroll such that the indicated position is displayed, but it will
-     * stop early if scrolling further would scroll boundPosition out of
-     * view.
-     * @param position Scroll to this adapter position.
-     * @param boundPosition Do not scroll if it would move this adapter
-     *          position out of view.
-     */
-    public void smoothScrollToPosition(int position, int boundPosition) {
-        if (mPositionScroller == null) {
-            mPositionScroller = new PositionScroller();
-        }
-        mPositionScroller.start(position, boundPosition);
-    }
-
-    /**
      * Smoothly scroll by distance pixels over duration milliseconds.
      * @param distance Distance to scroll in pixels.
      * @param duration Duration of the scroll animation in milliseconds.
@@ -3826,65 +3709,21 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
     }
 
     void smoothScrollBy(int distance, int duration, boolean linear) {
-//        if (mFlingRunnable == null) {
-//            mFlingRunnable = new FlingRunnable();
-//        }
-//
-//        // No sense starting to scroll if we're not going anywhere
-//        final int firstPos = mFirstPosition;
-//        final int childCount = getChildCount();
-//        final int lastPos = firstPos + childCount;
-//        final int topLimit = getPaddingTop();
-//        final int bottomLimit = getHeight() - getPaddingBottom();
-//
-//        if (distance == 0 || mItemCount == 0 || childCount == 0 ||
-//                (firstPos == 0 && getChildAt(0).getTop() == topLimit && distance < 0) ||
-//                (lastPos == mItemCount &&
-//                        getChildAt(childCount - 1).getBottom() == bottomLimit && distance > 0)) {
-//            mFlingRunnable.endFling();
-//            if (mPositionScroller != null) {
-//                mPositionScroller.stop();
-//            }
-//        } else {
-//            reportScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
-//            mFlingRunnable.startScroll(distance, duration, linear);
-//        }
-    }
+        Log.d("TwoWayView", "Will scroll by: " + distance);
 
-    /**
-     * Allows RemoteViews to scroll relatively to a position.
-     */
-    void smoothScrollByOffset(int position) {
-        int index = -1;
-        if (position < 0) {
-            index = getFirstVisiblePosition();
-        } else if (position > 0) {
-            index = getLastVisiblePosition();
-        }
+        mTouchMode = TOUCH_MODE_FLINGING;
+        reportScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
 
-        if (index > -1) {
-            View child = getChildAt(index - getFirstVisiblePosition());
-            if (child != null) {
-                Rect visibleRect = new Rect();
-                if (child.getGlobalVisibleRect(visibleRect)) {
-                    // the child is partially visible
-                    int childRectArea = child.getWidth() * child.getHeight();
-                    int visibleRectArea = visibleRect.width() * visibleRect.height();
-                    float visibleArea = (visibleRectArea / (float) childRectArea);
-                    final float visibleThreshold = 0.75f;
-                    if ((position < 0) && (visibleArea < visibleThreshold)) {
-                        // the top index is not perceivably visible so offset
-                        // to account for showing that top index as well
-                        ++index;
-                    } else if ((position > 0) && (visibleArea < visibleThreshold)) {
-                        // the bottom index is not perceivably visible so offset
-                        // to account for showing that bottom index as well
-                        --index;
-                    }
-                }
-                smoothScrollToPosition(Math.max(0, Math.min(getCount(), index + position)));
-            }
-        }
+        mScroller.startScroll(0, 0,
+                (int) (mIsVertical ? 0 : distance),
+                (int) (mIsVertical ? distance : 0), duration);
+
+        mLastTouchPos = 0;
+
+        recycleVelocityTracker();
+
+        ViewCompat.postInvalidateOnAnimation(this);
+
     }
 
 
@@ -6865,213 +6704,60 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
             int clampedPosition = Math.max(0, Math.min(getCount() - 1, position));
             if (clampedPosition < firstPos) {
                 viewTravelCount = firstPos - clampedPosition + 1;
-                mMode = MOVE_UP_POS;
             } else if (clampedPosition > lastPos) {
                 viewTravelCount = clampedPosition - lastPos + 1;
-                mMode = MOVE_DOWN_POS;
             } else {
-                scrollToVisible(clampedPosition, INVALID_POSITION, SCROLL_DURATION);
+                scrollToVisible(clampedPosition, SCROLL_DURATION);
                 return;
             }
 
             if (viewTravelCount > 0) {
-                mScrollDuration = SCROLL_DURATION / viewTravelCount;
+                mScrollDuration = SCROLL_DURATION * (viewTravelCount / (lastPos - firstPos));
             } else {
                 mScrollDuration = SCROLL_DURATION;
             }
             mTargetPos = clampedPosition;
-            mBoundPos = INVALID_POSITION;
-            mLastSeenPos = INVALID_POSITION;
 
-            postOnAnimation(this);
-        }
-
-        void start(final int position, final int boundPosition) {
-            stop();
-
-            if (boundPosition == INVALID_POSITION) {
-                start(position);
-                return;
-            }
-
-            if (mDataChanged) {
-                // Wait until we're back in a stable state to try this.
-                mPositionScrollAfterLayout = new Runnable() {
-                    @Override public void run() {
-                        start(position, boundPosition);
-                    }
-                };
-                return;
-            }
-
-            final int childCount = getChildCount();
-            if (childCount == 0) {
-                // Can't scroll without children.
-                return;
-            }
-
-            final int firstPos = mFirstPosition;
-            final int lastPos = firstPos + childCount - 1;
-
-            int viewTravelCount;
-            int clampedPosition = Math.max(0, Math.min(getCount() - 1, position));
-            if (clampedPosition < firstPos) {
-                final int boundPosFromLast = lastPos - boundPosition;
-                if (boundPosFromLast < 1) {
-                    // Moving would shift our bound position off the screen. Abort.
-                    return;
-                }
-
-                final int posTravel = firstPos - clampedPosition + 1;
-                final int boundTravel = boundPosFromLast - 1;
-                if (boundTravel < posTravel) {
-                    viewTravelCount = boundTravel;
-                    mMode = MOVE_UP_BOUND;
-                } else {
-                    viewTravelCount = posTravel;
-                    mMode = MOVE_UP_POS;
-                }
-            } else if (clampedPosition > lastPos) {
-                final int boundPosFromFirst = boundPosition - firstPos;
-                if (boundPosFromFirst < 1) {
-                    // Moving would shift our bound position off the screen. Abort.
-                    return;
-                }
-
-                final int posTravel = clampedPosition - lastPos + 1;
-                final int boundTravel = boundPosFromFirst - 1;
-                if (boundTravel < posTravel) {
-                    viewTravelCount = boundTravel;
-                    mMode = MOVE_DOWN_BOUND;
-                } else {
-                    viewTravelCount = posTravel;
-                    mMode = MOVE_DOWN_POS;
-                }
-            } else {
-                scrollToVisible(clampedPosition, boundPosition, SCROLL_DURATION);
-                return;
-            }
-
-            if (viewTravelCount > 0) {
-                mScrollDuration = SCROLL_DURATION / viewTravelCount;
-            } else {
-                mScrollDuration = SCROLL_DURATION;
-            }
-            mTargetPos = clampedPosition;
-            mBoundPos = boundPosition;
-            mLastSeenPos = INVALID_POSITION;
-
-            postOnAnimation(this);
-        }
-
-        void startWithOffset(int position, int offset) {
-            startWithOffset(position, offset, SCROLL_DURATION);
-        }
-
-        void startWithOffset(final int position, int offset, final int duration) {
-            stop();
-
-            if (mDataChanged) {
-                // Wait until we're back in a stable state to try this.
-                final int postOffset = offset;
-                mPositionScrollAfterLayout = new Runnable() {
-                    @Override public void run() {
-                        startWithOffset(position, postOffset, duration);
-                    }
-                };
-                return;
-            }
-
-            final int childCount = getChildCount();
-            if (childCount == 0) {
-                // Can't scroll without children.
-                return;
-            }
-
-            offset += getPaddingTop();
-
-            mTargetPos = Math.max(0, Math.min(getCount() - 1, position));
-            mOffsetFromStart = offset;
-            mBoundPos = INVALID_POSITION;
-            mLastSeenPos = INVALID_POSITION;
-            mMode = MOVE_OFFSET;
-
-            final int firstPos = mFirstPosition;
-            final int lastPos = firstPos + childCount - 1;
-
-            int viewTravelCount;
-            if (mTargetPos < firstPos) {
-                viewTravelCount = firstPos - mTargetPos;
-            } else if (mTargetPos > lastPos) {
-                viewTravelCount = mTargetPos - lastPos;
-            } else {
-                // On-screen, just scroll.
-                final int targetStart = mIsVertical ? getChildAt(mTargetPos - firstPos).getTop() : getChildAt(mTargetPos - firstPos).getLeft();
-                smoothScrollBy(targetStart - offset, duration/*, true*/);
-                return;
-            }
-
-            // Estimate how many screens we should travel
-            final float screenTravelCount = (float) viewTravelCount / childCount;
-            mScrollDuration = screenTravelCount < 1 ?
-                    duration : (int) (duration / screenTravelCount);
-            mLastSeenPos = INVALID_POSITION;
-
-            postOnAnimation(this);
+            scrollToVisible(mTargetPos, mScrollDuration);
         }
 
         /**
-         * Scroll such that targetPos is in the visible padded region without scrolling
-         * boundPos out of view. Assumes targetPos is onscreen.
+         * Scroll such that targetPos is in the first visible item in the padded region.
+         * Assumes targetPos is onscreen. For whom is offscreen, it does a
          */
-        void scrollToVisible(int targetPos, int boundPos, int duration) {
+        void scrollToVisible(int targetPos, int duration) {
             final int firstPos = mFirstPosition;
-            final int childCount = getChildCount();
-            final int lastPos = firstPos + childCount - 1;
-            final int paddedStart = mIsVertical ? getPaddingTop() : getPaddingLeft();
-            final int paddedEnd = mIsVertical ? getHeight() - getPaddingBottom() : getWidth() - getPaddingRight();
+            final int lastPos = firstPos + getChildCount() - 1;
+
+            int scrollBy = 0;
+            final View firstChild = getChildAt(0);
 
             if (targetPos < firstPos || targetPos > lastPos) {
                 Log.d("TwoWayView", "scrollToVisible called with targetPos " + targetPos +
                         " not visible [" + firstPos + ", " + lastPos + "]");
-            }
-            if (boundPos < firstPos || boundPos > lastPos) {
-                // boundPos doesn't matter, it's already offscreen.
-                boundPos = INVALID_POSITION;
-            }
 
-            final View targetChild = getChildAt(targetPos - firstPos);
-            final int targetStart = mIsVertical ? targetChild.getTop() : targetChild.getLeft();
-            final int targetEnd = mIsVertical ? targetChild.getBottom() : targetChild.getRight();
-            int scrollBy = 0;
+                final View secondChild = getChildAt(1);
+                int size = mIsVertical ? secondChild.getTop() - firstChild.getTop() :
+                                         secondChild.getLeft() - firstChild.getLeft();
 
-            if (targetEnd > paddedEnd) {
-                scrollBy = targetEnd - paddedEnd;
-            }
-            if (targetStart < paddedStart) {
-                scrollBy = targetStart - paddedStart;
+                int delta = targetPos - firstPos;
+
+                scrollBy = delta * size + (mIsVertical ? firstChild.getTop() : firstChild.getLeft());
+
+            } else {
+
+                final View targetChild = getChildAt(targetPos - firstPos);
+                final int targetStart = mIsVertical ? targetChild.getTop() : targetChild.getLeft();
+                final int firstChildStart = mIsVertical ? firstChild.getTop() : firstChild.getLeft();    // 0 at most
+
+                scrollBy = targetStart - Math.abs(firstChildStart);
             }
 
             if (scrollBy == 0) {
                 return;
             }
 
-            if (boundPos >= 0) {
-                final View boundChild = getChildAt(boundPos - firstPos);
-                final int boundStart = mIsVertical ? boundChild.getTop() : boundChild.getLeft();
-                final int boundEnd = mIsVertical ? boundChild.getBottom() : boundChild.getRight();
-                final int absScroll = Math.abs(scrollBy);
-
-                if (scrollBy < 0 && boundEnd + absScroll > paddedEnd) {
-                    // Don't scroll the bound view off the bottom of the screen.
-                    scrollBy = Math.max(0, boundEnd - paddedEnd);
-                } else if (scrollBy > 0 && boundStart - absScroll < paddedStart) {
-                    // Don't scroll the bound view off the top of the screen.
-                    scrollBy = Math.min(0, boundStart - paddedStart);
-                }
-            }
-
-            smoothScrollBy(scrollBy, duration);
+            smoothScrollBy(-scrollBy, duration);
         }
 
         void stop() {
@@ -7257,4 +6943,273 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
             }
         }
     }
+
+
+    /**
+     * Responsible for fling behavior. Use {@link #start(int)} to
+     * initiate a fling. Each frame of the fling is handled in {@link #run()}.
+     * A FlingRunnable will keep re-posting itself until the fling is done.
+     *
+     */
+//    private class FlingRunnable implements Runnable {
+//        /**
+//         * Tracks the decay of a fling scroll
+//         */
+//        private final OverScroller mScroller;
+//
+//        /**
+//         * Y value reported by mScroller on the previous fling
+//         */
+//        private int mLastFlingXY;
+//
+//        private final Runnable mCheckFlywheel = new Runnable() {
+//            @Override
+//            public void run() {
+//                final int activeId = mActivePointerId;
+//                final VelocityTracker vt = mVelocityTracker;
+//                final OverScroller scroller = mScroller;
+//                if (vt == null || activeId == INVALID_POINTER) {
+//                    return;
+//                }
+//
+//                vt.computeCurrentVelocity(1000, mMaximumVelocity);
+//                final float yvel = -vt.getYVelocity(activeId);
+//
+//                if (Math.abs(yvel) >= mMinimumVelocity
+//                        && scroller.isScrollingInDirection(0, yvel)) {
+//                    // Keep the fling alive a little longer
+//                    postDelayed(this, FLYWHEEL_TIMEOUT);
+//                } else {
+//                    endFling();
+//                    mTouchMode = TOUCH_MODE_SCROLL;
+//                    reportScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
+//                }
+//            }
+//        };
+//
+//        private static final int FLYWHEEL_TIMEOUT = 40; // milliseconds
+//
+//        FlingRunnable() {
+//            mScroller = new OverScroller(getContext());
+//        }
+//
+//        void start(int initialVelocity) {
+//            int initialY = initialVelocity < 0 ? Integer.MAX_VALUE : 0;
+//            mLastFlingXY = initialY;
+//            mScroller.fling(0, initialY, 0, initialVelocity,
+//                    0, Integer.MAX_VALUE, 0, Integer.MAX_VALUE);
+//            mTouchMode = TOUCH_MODE_FLING;
+//            postOnAnimation(this);
+//
+//            if (PROFILE_FLINGING) {
+//                if (!mFlingProfilingStarted) {
+//                    Debug.startMethodTracing("AbsListViewFling");
+//                    mFlingProfilingStarted = true;
+//                }
+//            }
+//
+//            if (mFlingStrictSpan == null) {
+//                mFlingStrictSpan = StrictMode.enterCriticalSpan("AbsListView-fling");
+//            }
+//        }
+//
+//        void startSpringback() {
+//            if (mScroller.springBack(0, mScrollY, 0, 0, 0, 0)) {
+//                mTouchMode = TOUCH_MODE_OVERFLING;
+//                invalidate();
+//                postOnAnimation(this);
+//            } else {
+//                mTouchMode = TOUCH_MODE_REST;
+//                reportScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+//            }
+//        }
+//
+//        void startOverfling(int initialVelocity) {
+////            mScroller.setInterpolator(null);
+//            mScroller.fling(0, mScrollY, 0, initialVelocity, 0, 0,
+//                    Integer.MIN_VALUE, Integer.MAX_VALUE, 0, getHeight());
+//            mTouchMode = TOUCH_MODE_OVERFLING;
+//            invalidate();
+//            postOnAnimation(this);
+//        }
+//
+//        void edgeReached(int delta) {
+//            mScroller.notifyVerticalEdgeReached(mScrollY, 0, mOverflingDistance);
+//            final int overscrollMode = getOverScrollMode();
+//            if (overscrollMode == OVER_SCROLL_ALWAYS ||
+//                    (overscrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && !contentFits())) {
+//                mTouchMode = TOUCH_MODE_OVERFLING;
+//                final int vel = (int) mScroller.getCurrVelocity();
+//                if (delta > 0) {
+//                    mEdgeGlowTop.onAbsorb(vel);
+//                } else {
+//                    mEdgeGlowBottom.onAbsorb(vel);
+//                }
+//            } else {
+//                mTouchMode = TOUCH_MODE_REST;
+//                if (mPositionScroller != null) {
+//                    mPositionScroller.stop();
+//                }
+//            }
+//            invalidate();
+//            postOnAnimation(this);
+//        }
+//
+//        void startScroll(int distance, int duration, boolean linear) {
+//            int initialY = distance < 0 ? Integer.MAX_VALUE : 0;
+//            mLastFlingXY = initialY;
+//            mScroller.setInterpolator(linear ? sLinearInterpolator : null);
+//            mScroller.startScroll(0, initialY, 0, distance, duration);
+//            mTouchMode = TOUCH_MODE_FLING;
+//            postOnAnimation(this);
+//        }
+//
+//        void endFling() {
+//            mTouchMode = TOUCH_MODE_REST;
+//
+//            removeCallbacks(this);
+//            removeCallbacks(mCheckFlywheel);
+//
+//            reportScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+//            clearScrollingCache();
+//            mScroller.abortAnimation();
+//
+//            if (mFlingStrictSpan != null) {
+//                mFlingStrictSpan.finish();
+//                mFlingStrictSpan = null;
+//            }
+//        }
+//
+//        void flywheelTouch() {
+//            postDelayed(mCheckFlywheel, FLYWHEEL_TIMEOUT);
+//        }
+//
+//        @Override
+//        public void run() {
+//            switch (mTouchMode) {
+//                default:
+//                    endFling();
+//                    return;
+//
+//                case TOUCH_MODE_SCROLL:
+//                    if (mScroller.isFinished()) {
+//                        return;
+//                    }
+//                    // Fall through
+//                case TOUCH_MODE_FLING: {
+//                    if (mDataChanged) {
+//                        layoutChildren();
+//                    }
+//
+//                    if (mItemCount == 0 || getChildCount() == 0) {
+//                        endFling();
+//                        return;
+//                    }
+//
+//                    final OverScroller scroller = mScroller;
+//                    boolean more = scroller.computeScrollOffset();
+//                    final int y = scroller.getCurrY();
+//
+//                    // Flip sign to convert finger direction to list items direction
+//                    // (e.g. finger moving down means list is moving towards the top)
+//                    int delta = mLastFlingXY - y;
+//
+//                    // Pretend that each frame of a fling scroll is a touch scroll
+//                    if (delta > 0) {
+//                        // List is moving towards the top. Use first view as mMotionPosition
+//                        mMotionPosition = mFirstPosition;
+//                        final View firstView = getChildAt(0);
+//                        mMotionViewOriginalTop = firstView.getTop();
+//
+//                        // Don't fling more than 1 screen
+//                        delta = Math.min(getHeight() - mPaddingBottom - mPaddingTop - 1, delta);
+//                    } else {
+//                        // List is moving towards the bottom. Use last view as mMotionPosition
+//                        int offsetToLast = getChildCount() - 1;
+//                        mMotionPosition = mFirstPosition + offsetToLast;
+//
+//                        final View lastView = getChildAt(offsetToLast);
+//                        mMotionViewOriginalTop = lastView.getTop();
+//
+//                        // Don't fling more than 1 screen
+//                        delta = Math.max(-(getHeight() - mPaddingBottom - mPaddingTop - 1), delta);
+//                    }
+//
+//                    // Check to see if we have bumped into the scroll limit
+//                    View motionView = getChildAt(mMotionPosition - mFirstPosition);
+//                    int oldTop = 0;
+//                    if (motionView != null) {
+//                        oldTop = motionView.getTop();
+//                    }
+//
+//                    // Don't stop just because delta is zero (it could have been rounded)
+//                    final boolean atEdge = trackMotionScroll(delta, delta);
+//                    final boolean atEnd = atEdge && (delta != 0);
+//                    if (atEnd) {
+//                        if (motionView != null) {
+//                            // Tweak the scroll for how far we overshot
+//                            int overshoot = -(delta - (motionView.getTop() - oldTop));
+//                            overScrollBy(0, overshoot, 0, mScrollY, 0, 0,
+//                                    0, mOverflingDistance, false);
+//                        }
+//                        if (more) {
+//                            edgeReached(delta);
+//                        }
+//                        break;
+//                    }
+//
+//                    if (more && !atEnd) {
+//                        if (atEdge) invalidate();
+//                        mLastFlingXY = y;
+//                        postOnAnimation(this);
+//                    } else {
+//                        endFling();
+//
+//                        if (PROFILE_FLINGING) {
+//                            if (mFlingProfilingStarted) {
+//                                Debug.stopMethodTracing();
+//                                mFlingProfilingStarted = false;
+//                            }
+//
+//                            if (mFlingStrictSpan != null) {
+//                                mFlingStrictSpan.finish();
+//                                mFlingStrictSpan = null;
+//                            }
+//                        }
+//                    }
+//                    break;
+//                }
+//
+//                case TOUCH_MODE_OVERFLING: {
+//                    final OverScroller scroller = mScroller;
+//                    if (scroller.computeScrollOffset()) {
+//                        final int scrollY = mScrollY;
+//                        final int currY = scroller.getCurrY();
+//                        final int deltaY = currY - scrollY;
+//                        if (overScrollBy(0, deltaY, 0, scrollY, 0, 0,
+//                                0, mOverflingDistance, false)) {
+//                            final boolean crossDown = scrollY <= 0 && currY > 0;
+//                            final boolean crossUp = scrollY >= 0 && currY < 0;
+//                            if (crossDown || crossUp) {
+//                                int velocity = (int) scroller.getCurrVelocity();
+//                                if (crossUp) velocity = -velocity;
+//
+//                                // Don't flywheel from this; we're just continuing things.
+//                                scroller.abortAnimation();
+//                                start(velocity);
+//                            } else {
+//                                startSpringback();
+//                            }
+//                        } else {
+//                            invalidate();
+//                            postOnAnimation(this);
+//                        }
+//                    } else {
+//                        endFling();
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+//    }
 }

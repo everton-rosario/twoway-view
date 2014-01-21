@@ -29,9 +29,6 @@
                  android:label="@string/app_name" >
 
         <activity android:name=".MainActivity" >
-        </activity>
-
-        <activity android:name=".ListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
