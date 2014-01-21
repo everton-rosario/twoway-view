@@ -72,7 +72,6 @@ public class MainActivity extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View child,
                     int position, long id) {
                 mClickMessage = "Item long pressed: " + position;
-                mListView.smoothScrollToPosition(position+10);
                 refreshToast();
                 return true;
             }
