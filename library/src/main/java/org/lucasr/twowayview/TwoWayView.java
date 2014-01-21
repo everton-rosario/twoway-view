@@ -2998,7 +2998,7 @@ public class TwoWayView extends AdapterView<ListAdapter> implements
         removeCallbacks(mPendingCheckForLongPress);
     }
 
-    public boolean scrollListItemsBy(int incrementalDelta) {
+    private boolean scrollListItemsBy(int incrementalDelta) {
         final int childCount = getChildCount();
         if (childCount == 0) {
             return true;
